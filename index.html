@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<title>VaaniNotes</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--pri:#6366f1;--acc:#ec4899;--red:#e5484d;--bd:#e4e7ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1117;--card:#1a1d27;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2a2e3b}}
+:root[data-theme="dark"]{--bg:#0f1117;--card:#1a1d27;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2a2e3b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;line-height:1.5;overflow:hidden}
+button,select{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px 14px;cursor:pointer;transition:transform .15s}
+button:active{transform:scale(.95)}button:disabled{opacity:.5}
+.pri{background:linear-gradient(135deg,var(--pri),var(--acc));color:#fff;border:0;font-weight:600}
+/* splash */
+#splash{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#312e81,#6366f1 55%,#ec4899);color:#fff;text-align:center;transition:opacity .6s,transform .6s}
+#splash.out{opacity:0;transform:scale(1.15);pointer-events:none}
+.lgw{position:relative;display:grid;place-items:center;width:150px;height:150px;animation:fl 3s ease-in-out infinite}
+.lgw i{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,.5);animation:rg 2.4s infinite}
+.lgw i:nth-child(2){animation-delay:.8s}.lgw i:nth-child(3){animation-delay:1.6s}
+@keyframes rg{from{transform:scale(.6);opacity:.9}to{transform:scale(1.7);opacity:0}}
+@keyframes fl{50%{transform:translateY(-10px)}}
+.lg{filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));animation:pop .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes pop{from{transform:scale(0) rotate(-120deg)}}
+.wv path{transform-box:fill-box;transform-origin:center;animation:wv 1s ease-in-out infinite}
+.wv path:nth-child(2n){animation-delay:.25s}.wv path:nth-child(3){animation-delay:.5s}
+@keyframes wv{50%{transform:scaleY(1.8)}}
+#nm{font-size:40px;font-weight:800;margin:22px 0 2px;letter-spacing:1px}
+#nm span{display:inline-block;animation:up .6s both}
+@keyframes up{from{opacity:0;transform:translateY(24px)}}
+.tag{opacity:.9;animation:up .8s 1.2s both}
+.bar{width:160px;height:4px;background:rgba(255,255,255,.25);border-radius:4px;margin-top:30px;overflow:hidden}
+.bar b{display:block;height:100%;background:#fff;width:0;animation:ld 2.8s ease-out forwards}
+@keyframes ld{to{width:100%}}
+.fdr{position:absolute;bottom:28px;font-size:13px;opacity:.85;animation:up .8s 1.6s both}
+/* app */
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+.scr{display:none;flex:1;overflow-y:auto;padding:16px 16px 96px}
+.scr.act{display:block;animation:sl .35s ease}
+@keyframes sl{from{opacity:0;transform:translateY(16px)}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:14px}
+h2{margin:4px 0 12px;font-size:22px}
+.hd{display:flex;align-items:center;gap:12px;margin-bottom:14px}.hd .lg{animation:none}
+.hd b{font-size:20px}.hd small{display:block;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:12px;text-align:center;animation:up .5s both}
+.stat:nth-child(2){animation-delay:.1s}.stat:nth-child(3){animation-delay:.2s}
+.stat b{font-size:24px;display:block;color:var(--pri)}.stat small{color:var(--mut)}
+.hero{background:linear-gradient(135deg,#4f46e5,#ec4899);color:#fff;text-align:center;border:0;padding:22px}
+.hero button{margin-top:10px;font-size:17px;background:#fff;color:#4f46e5;border:0;padding:14px 26px;border-radius:30px;font-weight:700;animation:bt 2s infinite}
+@keyframes bt{50%{box-shadow:0 0 0 12px rgba(255,255,255,.25)}}
+.item{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;border:1px solid var(--bd);border-radius:14px;margin-bottom:8px;background:var(--card);cursor:pointer;animation:up .4s both}
+.item small{color:var(--mut)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rec{display:block;margin:14px auto 4px;width:100%;max-width:320px;padding:16px;font-size:18px}
+.rec.on{background:var(--red);animation:pl 1.4s infinite}
+@keyframes pl{50%{box-shadow:0 0 0 14px rgba(229,72,77,.2)}}
+.wave{display:none;justify-content:center;align-items:center;gap:5px;height:40px}.wave.on{display:flex}
+.wave i{width:5px;height:10px;border-radius:4px;background:linear-gradient(var(--pri),var(--acc));animation:wb .9s ease-in-out infinite}
+.wave i:nth-child(2n){animation-delay:.2s}.wave i:nth-child(3n){animation-delay:.4s}.wave i:nth-child(5){animation-delay:.1s}
+@keyframes wb{50%{height:36px}}
+#st{text-align:center;font-size:13px;color:var(--mut)}
+#tr{min-height:80px;max-height:160px;overflow:auto;white-space:pre-wrap;font-size:15px;color:var(--mut);outline:none}
+#paper{position:relative;background:#fff;color:#111;border-radius:14px;border:1px solid var(--bd);padding:26px 22px 56px;min-height:280px;overflow:hidden}
+#paper::before{content:"VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes  VaaniNotes";position:absolute;inset:-40% -20%;font:700 54px/2.6 sans-serif;color:rgba(79,70,229,.07);transform:rotate(-28deg);pointer-events:none;word-spacing:30px}
+#ed{position:relative;outline:none;min-height:200px}#ed h1{font-size:22px;margin:0 0 6px}#ed h2{font-size:17px;margin:14px 0 6px;color:#3730a3}#ed ul{padding-left:22px}
+.ft{position:relative;margin-top:28px;border-top:1px solid #ddd;padding-top:8px;font-size:12px;color:#555;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.set{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd)}.set:last-child{border:0}
+.sw{width:50px;height:28px;border-radius:20px;background:var(--bd);position:relative;padding:0;border:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.25s}
+.sw.on{background:var(--pri)}.sw.on::after{left:25px}
+.note{font-size:12px;color:var(--mut)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;border:0;background:none;border-radius:14px;font-size:11px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px}
+nav button span{font-size:22px;transition:transform .3s}
+nav button.act{color:var(--pri);font-weight:700}nav button.act span{transform:translateY(-4px) scale(1.25)}
+.net{margin-left:auto;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600}
+.net.ok{background:rgba(34,197,94,.15);color:#16a34a}.net.off{background:rgba(245,158,11,.18);color:#d97706}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#1b1f2a;color:#fff;padding:10px 16px;border-radius:24px;font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:40;max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.srch{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;margin-bottom:12px}
+.tg{color:#d97706;font-weight:600}
+button:focus-visible,select:focus-visible,.srch:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+@media print{body{overflow:visible;background:#fff}#splash,nav,.no{display:none!important}#app{position:static}.scr{display:none!important}#s-rec{display:block!important;padding:0}.card{border:0;padding:0}#paper{border:0}}
+</style>
+</head>
+<body>
+<div id="splash">
+<div class="lgw"><i></i><i></i><i></i><div id="bl"></div></div>
+<div id="nm"></div>
+<div class="tag">बोलिए · लिखिए नहीं — Voice to Professional Notes</div>
+<div class="bar"><b></b></div>
+<div class="fdr">Founder: Mr. Md Imamul Kalam</div>
+</div>
+
+<div id="app">
+<section class="scr act" id="s-home">
+<div class="hd"><span id="hl"></span><div><b>VaaniNotes</b><small>नमस्ते 👋 आज क्या record करें?</small></div><span id="net" class="net"></span></div>
+<div class="stats"><div class="stat"><b id="n1">0</b><small>Notes</small></div><div class="stat"><b id="n2">0</b><small>शब्द</small></div><div class="stat"><b id="n3">—</b><small>आख़िरी</small></div></div>
+<div class="card hero"><div style="font-size:18px;font-weight:700">नई Recording शुरू करें</div><div style="opacity:.9;font-size:13px">Hindi · Bhojpuri · English और अन्य</div><button onclick="go('rec');if(!on)start()">🎙️ Start Recording</button></div>
+<h2 style="font-size:17px">हाल के Notes</h2><div id="recent"></div>
+</section>
+
+<section class="scr" id="s-rec">
+<div class="no">
+<div class="card">
+<div class="row"><label for="lang">भाषा:</label><select id="lang"></select></div>
+<button class="rec pri" id="rec">● Start Recording</button>
+<div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div id="st">तैयार है। Start दबाइए।</div>
+</div>
+<div class="card"><b>Live Transcript</b> <span class="note">(सुधार भी कर सकते हैं)</span>
+<div id="tr" contenteditable="true" spellcheck="false"></div>
+<div class="row" style="margin-top:10px"><button class="pri" id="gen">✨ Notes बनाइए</button><button id="clr">साफ़ करें</button></div></div>
+</div>
+<div class="card">
+<div class="row no" style="margin-bottom:10px"><button id="sv">💾 Save</button><button id="pr">🖨️ Print</button><button id="dh">⬇ HTML</button><button id="dt">⬇ TXT</button><button id="cp">📋 Copy</button><button id="b"><b>B</b></button><button id="bl2">• List</button></div>
+<div id="paper"><div id="ed" contenteditable="true"><h1>Notes यहाँ दिखेंगे</h1><p>Recording रोकते ही आपकी बातों के professional notes यहाँ बन जाएँगे। इन्हें सीधे edit कीजिए।</p></div>
+<div class="ft"><span>Generated by <b>VaaniNotes</b> · Founder: Mr. Md Imamul Kalam</span><span id="dt2"></span></div></div>
+</div>
+</section>
+
+<section class="scr" id="s-notes"><h2>📒 मेरे Notes</h2><input id="q" class="srch" placeholder="🔍 Notes खोजें…" aria-label="Search notes"><div id="list"></div><div class="row" style="margin-top:10px"><button id="exp">⬆ Backup</button><button id="impb">⬇ Restore</button><input type="file" id="imp" accept=".txt,.json" hidden></div></section>
+
+<section class="scr" id="s-set"><h2>⚙️ Settings</h2>
+<div class="card">
+<div class="set"><span>डिफ़ॉल्ट भाषा</span><select id="sLang"></select></div>
+<div class="set"><span>Notes का तरीका</span><select id="sStyle"><option value="detailed">Detailed</option><option value="brief">Brief (छोटे)</option><option value="meeting">Meeting Minutes</option><option value="study">Study Notes</option></select></div>
+<div class="set"><span>Theme</span><select id="sTheme"><option value="auto">Auto</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+<div class="set"><span>Recording में screen जगाए रखें</span><button class="sw" id="sAwake"></button></div>
+</div>
+<div class="card"><div class="set"><span>सारा data मिटाएँ</span><button id="wipe">🗑️ Delete</button></div></div>
+<div class="card" style="text-align:center"><div id="al" style="display:inline-block"></div><h3 style="margin:6px 0 0">VaaniNotes</h3><div class="note">Version 1.0</div><p style="margin:8px 0 0">Founder: <b>Mr. Md Imamul Kalam</b></p></div>
+<p class="note">फ़ोन पर install: browser menu → “Add to Home screen”। Screen बंद होने पर कई ब्राउज़र mic रोक देते हैं, इसलिए ऊपर वाला screen-awake option चालू रखें।</p>
+</section>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<nav aria-label="Main">
+<button data-s="home" class="act"><span>🏠</span>Home</button>
+<button data-s="rec"><span>🎙️</span>Record</button>
+<button data-s="notes"><span>📒</span>Notes</button>
+<button data-s="set"><span>⚙️</span>Settings</button>
+</nav>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+function logo(s){return '<svg class="lg" width="'+s+'" height="'+s+'" viewBox="0 0 100 100"><defs><linearGradient id="g'+s+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#g'+s+')"/><rect x="40" y="18" width="20" height="38" rx="10" fill="#fff"/><path d="M30 48a20 20 0 0 0 40 0" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M50 68v12M40 80h20" stroke="#fff" stroke-width="5" stroke-linecap="round"/><g class="wv" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".85"><path d="M20 36v14"/><path d="M11 40v6"/><path d="M80 36v14"/><path d="M89 40v6"/></g></svg>'}
+$("bl").innerHTML=logo(110);$("hl").innerHTML=logo(46);$("al").innerHTML=logo(70);
+$("nm").innerHTML="VaaniNotes".split("").map((c,i)=>'<span style="animation-delay:'+(.5+i*.07)+'s">'+c+'</span>').join("");
+const LANGS=[["hi-IN","हिन्दी (Hindi)"],["bho","भोजपुरी (Bhojpuri)"],["en-IN","English (India)"],["ur-IN","اردو (Urdu)"],["bn-IN","বাংলা (Bengali)"],["mr-IN","मराठी (Marathi)"],["ta-IN","தமிழ் (Tamil)"],["te-IN","తెలుగు (Telugu)"],["gu-IN","ગુજરાતી (Gujarati)"],["pa-IN","ਪੰਜਾਬੀ (Punjabi)"]];
+["lang","sLang"].forEach(i=>$(i).innerHTML=LANGS.map(l=>'<option value="'+l[0]+'">'+l[1]+'</option>').join(""));
+/* storage */
+const mem={};
+function ld(k,d){try{const v=localStorage.getItem(k);if(v)return JSON.parse(v)}catch(e){}return mem[k]||d}
+function sv(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let S=Object.assign({lang:"hi-IN",theme:"auto",style:"detailed",awake:true},ld("vn_s",{}));
+let notes=ld("vn_n",[]),curId=null;
+function applyS(){$("lang").value=$("sLang").value=S.lang;$("sStyle").value=S.style;$("sTheme").value=S.theme;$("sAwake").classList.toggle("on",S.awake);
+ if(S.theme==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.dataset.theme=S.theme}
+applyS();
+$("sLang").onchange=e=>{S.lang=e.target.value;sv("vn_s",S);applyS()};
+$("lang").onchange=e=>{S.lang=e.target.value;sv("vn_s",S);applyS()};
+$("sStyle").onchange=e=>{S.style=e.target.value;sv("vn_s",S)};
+$("sTheme").onchange=e=>{S.theme=e.target.value;sv("vn_s",S);applyS()};
+$("sAwake").onclick=()=>{S.awake=!S.awake;sv("vn_s",S);applyS()};
+$("wipe").onclick=()=>{if(confirm("सारे notes मिट जाएँगे। पक्का?")){notes=[];sv("vn_n",notes);render()}};
+/* nav */
+function go(s){document.querySelectorAll(".scr").forEach(e=>e.classList.toggle("act",e.id==="s-"+s));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("act",b.dataset.s===s));if(s==="home"||s==="notes")render()}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.s));
+setTimeout(()=>$("splash").classList.add("out"),3100);$("splash").onclick=()=>$("splash").classList.add("out");
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function ttl(h){const t=document.createElement("div");t.innerHTML=h;const x=t.querySelector("h1,h2");return(x?x.textContent:t.textContent).trim().slice(0,50)||"Untitled"}
+function words(h){const t=document.createElement("div");t.innerHTML=h;return (t.textContent.match(/\S+/g)||[]).length}
+function row(n){return '<div class="item" onclick="openN('+n.id+')"><div><b>'+esc(n.title)+'</b>'+(n.pending?' <small class="tg">⏳ AI pending</small>':'')+'<br><small>'+n.date+' · '+n.w+' शब्द</small></div><span>›</span></div>'}
+function render(){const q=($("q").value||"").toLowerCase();$("n1").textContent=notes.length;$("n2").textContent=notes.reduce((a,n)=>a+n.w,0);$("n3").textContent=notes[0]?notes[0].date.split(",")[0]:"—";
+ $("recent").innerHTML=notes.slice(0,3).map(row).join("")||'<div class="note">अभी कोई note नहीं। पहली recording शुरू कीजिए!</div>';
+ const L=notes.filter(n=>!q||(n.title+" "+n.html.replace(/<[^>]+>/g," ")).toLowerCase().includes(q));
+ $("list").innerHTML=L.map(n=>row(n).replace('<span>›</span>','<button aria-label="Delete" onclick="event.stopPropagation();delN('+n.id+')">🗑️</button>')).join("")||'<div class="note">कोई note नहीं मिला।</div>'}
+function openN(id){const n=notes.find(x=>x.id===id);if(!n)return;curId=id;$("ed").innerHTML=n.html;go("rec");$("paper").scrollIntoView({behavior:"smooth"})}
+function delN(id){notes=notes.filter(n=>n.id!==id);sv("vn_n",notes);render()}
+function saveN(x){x=x||{};const h=$("ed").innerHTML,old=notes.find(n=>n.id===curId)||{},o=Object.assign({},old,{id:curId||Date.now(),title:ttl(h),html:h,w:words(h),date:new Date().toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})},x);
+ if(!o.pending)delete o.pending;const i=notes.findIndex(n=>n.id===o.id);if(i>=0)notes[i]=o;else notes.unshift(o);curId=o.id;sv("vn_n",notes)}
+$("sv").onclick=()=>{saveN();$("st").textContent="💾 Save हो गया"};
+/* voice */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null,session=0,on=false,committed="",curFinals=[],lock=null,ac=null,sample=null,dl=null,syncing=false;
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2800)}
+function netUI(){const o=navigator.onLine;$("net").textContent=o?"● Online":"○ Offline";$("net").className="net "+(o?"ok":"off")}
+addEventListener("online",()=>{netUI();toast("Online हो गए ✓");syncPending()});
+addEventListener("offline",()=>{netUI();toast("Offline mode: notes local बनेंगे")});netUI();
+$("dt2").textContent=new Date().toLocaleDateString("en-IN");
+(async()=>{try{sample=await claude.use("sample")}catch(e){}try{dl=await claude.use("downloads")}catch(e){}if(!dl)$("dh").style.display=$("dt").style.display=$("exp").style.display="none";syncPending()})();
+async function keepAwake(){if(!S.awake)return;try{if(navigator.wakeLock&&!lock)lock=await navigator.wakeLock.request("screen")}catch(e){}
+ try{if(!ac||!ac._o){ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();g.gain.value=.0001;o.connect(g);g.connect(ac.destination);o.start();ac._o=o}}catch(e){}}
+function release(){try{lock&&lock.release()}catch(e){}lock=null;try{ac&&ac._o&&ac._o.stop()}catch(e){}if(ac)ac._o=null}
+document.addEventListener("visibilitychange",()=>{if(on&&document.visibilityState==="visible"){lock=null;keepAwake()}});
+function ui(){$("rec").classList.toggle("on",on);$("wave").classList.toggle("on",on);$("rec").textContent=on?"■ Stop Recording":"● Start Recording";$("st").textContent=on?"🔴 सुन रहा हूँ… बोलते रहिए":"तैयार है। Start दबाइए।"}
+/* duplicate-safe merge: cumulative or repeated final segments collapse into one */
+function joinSegs(list){const out=[];for(const raw of list){const t=raw.trim();if(!t)continue;const p=out[out.length-1];
+ if(p&&(t.startsWith(p)||p.startsWith(t)||p.endsWith(t))){if(t.length>p.length)out[out.length-1]=t;continue}out.push(t)}return out.join(" ")}
+function shown(extra){return[committed,joinSegs(curFinals),extra||""].filter(Boolean).join(" ")}
+function commitCur(){committed=shown();curFinals=[]}
+function spawn(){
+ const id=++session,r=new SR();rec=r;curFinals=[];
+ r.lang=S.lang==="bho"?"hi-IN":S.lang;r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+ if(!navigator.onLine&&"processLocally" in r){try{r.processLocally=true}catch(e){}}
+ r.onresult=e=>{if(id!==session)return;const f=[];let it="";for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)f.push(t);else it+=t}
+  curFinals=f;$("tr").textContent=shown(it);$("tr").scrollTop=1e9};
+ r.onend=()=>{if(id!==session||!on)return;commitCur();setTimeout(()=>{if(on&&id===session)spawn()},300)};
+ r.onerror=e=>{if(id!==session)return;if(e.error==="not-allowed"||e.error==="service-not-allowed"){on=false;session++;release();ui();toast("Microphone की अनुमति दीजिए")}
+  else if(e.error==="network"){on=false;session++;release();ui();toast(navigator.onLine?"Network error – दोबारा कोशिश कीजिए":"Offline: इस डिवाइस पर voice recognition उपलब्ध नहीं। आप transcript में type कर सकते हैं")}};
+ try{r.start()}catch(e){}}
+function start(){if(on)return;if(!SR){toast("Voice recognition इस ब्राउज़र में नहीं है। Chrome इस्तेमाल करें");return}
+ committed=$("tr").innerText.trim();curFinals=[];on=true;ui();keepAwake();spawn()}
+function stop(){if(!on)return;on=false;ui();release();const r=rec;let done=false;
+ const fin=()=>{if(done)return;done=true;commitCur();session++;$("tr").textContent=committed;gen()};
+ r.onend=fin;setTimeout(fin,900);try{r.stop()}catch(e){fin()}}
+$("rec").onclick=()=>on?stop():start();
+$("clr").onclick=()=>{if(on)return;committed="";curFinals=[];$("tr").textContent=""};
+const OK=new Set(["H1","H2","H3","P","UL","OL","LI","B","STRONG","I","EM","BR","DIV","SPAN"]);
+function clean(h){const t=document.createElement("template");t.innerHTML=h;t.content.querySelectorAll("*").forEach(n=>{if(!OK.has(n.tagName))n.replaceWith(...n.childNodes);else[...n.attributes].forEach(a=>n.removeAttribute(a.name))});return t.innerHTML}
+const STY={detailed:"Include: Summary (2-3 lines), Key Points, Action Items (only if any), Details.",brief:"Keep it SHORT: a title, a 2-line summary and 4-6 bullet points only.",meeting:"Format as meeting minutes: Title, Discussion Points, Decisions, Action Items with owners if mentioned.",study:"Format as study notes: Title, Key Concepts, Definitions, Examples, Quick Revision bullets."};
+async function aiNotes(txt){
+ if(!sample||!navigator.onLine)return null;
+ const lang=LANGS.find(l=>l[0]===S.lang)[1]+(S.lang==="bho"?" (Bhojpuri speech transcribed by a Hindi engine; expect phonetic Hindi spellings)":"");
+ try{const r=await sample("You are a professional note-taker. Below is a raw, possibly noisy speech transcript. Language spoken: "+lang+".\nWrite polished, well-organized notes in the SAME language/script the speaker used (Bhojpuri/Hindi → Devanagari). Fix recognition errors and filler words, never invent facts.\nOutput ONLY an HTML fragment using just: <h1> (short title), <h2>, <p>, <ul><li>, <strong>. "+STY[S.style]+" No markdown, no code fences.\n\nTRANSCRIPT:\n"+txt,{modelTier:"default",cache:false});
+  const o=clean(r.text.replace(/```html|```/g,""));return o.trim()?o:null}catch(e){return null}}
+function localNotes(t){const q=t.split(/(?<=[।.?!])\s+/).map(x=>x.trim()).filter(Boolean);
+ return "<h1>"+esc(t.split(/\s+/).slice(0,7).join(" "))+"…</h1><h2>Summary</h2><p>"+esc(q.slice(0,2).join(" "))+"</p><h2>Key Points</h2><ul>"+q.slice(0,10).map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>"}
+async function gen(){
+ const txt=$("tr").innerText.trim();if(!txt){toast("पहले कुछ बोलिए या type कीजिए");return}
+ $("gen").disabled=true;$("ed").innerHTML="<p>⏳ Notes तैयार हो रहे हैं…</p>";curId=null;
+ let out=await aiNotes(txt),pending=false;if(!out){out=localNotes(txt);pending=true}
+ $("ed").innerHTML=out;saveN({tx:txt,pending});$("gen").disabled=false;
+ committed="";curFinals=[];$("tr").textContent="";
+ toast(pending?"Local notes बने – online आते ही AI से सुधर जाएँगे":"✅ Notes तैयार और save हो गए");$("paper").scrollIntoView({behavior:"smooth"})}
+$("gen").onclick=gen;
+async function syncPending(){if(syncing||!sample||!navigator.onLine)return;syncing=true;let c=0;
+ for(const n of notes.filter(x=>x.pending&&x.tx)){const o=await aiNotes(n.tx);if(!o)break;n.html=o;n.title=ttl(o);n.w=words(o);delete n.pending;c++;if(curId===n.id)$("ed").innerHTML=o}
+ if(c){sv("vn_n",notes);render();toast("✨ "+c+" note AI से बेहतर हो गए")}syncing=false}
+let _t;$("ed").addEventListener("input",()=>{if(!curId)return;clearTimeout(_t);_t=setTimeout(()=>saveN({pending:false}),800)});
+$("sv").onclick=()=>{saveN({pending:false});toast("💾 Save हो गया")};
+$("cp").onclick=async()=>{try{await navigator.clipboard.writeText($("ed").innerText);toast("📋 Copy हो गया")}catch(e){toast("Copy नहीं हो सका")}};
+$("q").oninput=render;
+$("exp").onclick=()=>save("VaaniNotes-backup.txt",JSON.stringify(notes));
+$("impb").onclick=()=>$("imp").click();
+$("imp").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const a=JSON.parse(r.result);if(!Array.isArray(a))throw 0;a.filter(x=>x&&x.id&&x.html).forEach(x=>{if(!notes.some(n=>n.id===x.id))notes.push(x)});notes.sort((a,b)=>b.id-a.id);sv("vn_n",notes);render();toast("Restore हो गया ✓")}catch(_){toast("गलत backup file")}};r.readAsText(f);e.target.value=""};
+$("pr").onclick=()=>window.print();
+$("b").onclick=()=>document.execCommand("bold");$("bl2").onclick=()=>document.execCommand("insertUnorderedList");
+function doc(){return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>VaaniNotes</title><style>body{font-family:sans-serif;max-width:720px;margin:30px auto;padding:20px;line-height:1.6}h2{color:#3730a3}.wm{position:fixed;top:40%;left:0;right:0;text-align:center;font:700 90px sans-serif;color:rgba(79,70,229,.08);transform:rotate(-25deg);z-index:-1}.ft{margin-top:40px;border-top:1px solid #ccc;padding-top:8px;font-size:12px;color:#555}</style></head><body><div class="wm">VaaniNotes</div>'+$("ed").innerHTML+'<div class="ft">Generated by <b>VaaniNotes</b> · Founder: Mr. Md Imamul Kalam · '+new Date().toLocaleString("en-IN")+'</div></body></html>'}
+async function save(n,d){try{await dl.save({filename:n,data:d})}catch(e){}}
+$("dh").onclick=()=>save("VaaniNotes.html",doc());
+$("dt").onclick=()=>save("VaaniNotes.txt",$("ed").innerText+"\n\n— Generated by VaaniNotes | Founder: Mr. Md Imamul Kalam");
+render();
+</script>
+</body>
+</html>
